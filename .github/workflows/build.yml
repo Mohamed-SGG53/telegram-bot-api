@@ -19,14 +19,17 @@ jobs:
       with:
         arch: x64
 
-    - name: Install Dependencies (gperf, zlib)
-      run: choco install gperf zlib
+    - name: Install gperf via Chocolatey
+      run: choco install gperf -y
+
+    - name: Install zlib via vcpkg
+      run: C:\vcpkg\vcpkg install zlib:x64-windows
 
     - name: Configure CMake
       run: |
         mkdir build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=Release -A x64 ..
+        cmake -DCMAKE_BUILD_TYPE=Release -A x64 -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ..
 
     - name: Build
       run: cmake --build build --target telegram-bot-api --config Release
