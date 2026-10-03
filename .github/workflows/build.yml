@@ -1,7 +1,7 @@
 name: Build Telegram Bot API
 
 on:
-  workflow_dispatch: # يسمح بتشغيل البناء يدوياً
+  workflow_dispatch:
 
 jobs:
   build:
@@ -20,13 +20,16 @@ jobs:
         arch: x64
 
     - name: Configure CMake
-      run: cmake -DCMAKE_BUILD_TYPE=Release -A x64 .
+      run: |
+        mkdir build
+        cd build
+        cmake -DCMAKE_BUILD_TYPE=Release -A x64 ..
 
     - name: Build
-      run: cmake --build . --target telegram-bot-api --config Release
+      run: cmake --build build --target telegram-bot-api --config Release
 
     - name: Upload Executable
       uses: actions/upload-artifact@v4
       with:
         name: telegram-bot-api-windows
-        path: Release/telegram-bot-api.exe
+        path: build/Release/telegram-bot-api.exe
